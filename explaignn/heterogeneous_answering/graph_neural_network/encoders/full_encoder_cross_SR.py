@@ -20,7 +20,7 @@ class FullEncoderCrossSR(Encoder):
 
         if config.get("gnn_add_entity_type"):
             self.string_lib = StringLibrary(config)
-            with open("_data/types.pickle", "rb") as fp:
+            with open(self.config["path_to_types"], "rb") as fp:
                 self.type_dict = pickle.load(fp)
 
         # load LM

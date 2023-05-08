@@ -28,6 +28,7 @@ source_combinations:
 #################################################################
 path_to_stopwords: "_data/stopwords.txt"
 path_to_labels: "_data/labels.pickle"
+path_to_types: "_data/types.pickle"
 path_to_wikipedia_mappings: "_data/wikipedia_mappings.pickle"
 path_to_wikidata_mappings: "_data/wikidata_mappings.pickle"
 
