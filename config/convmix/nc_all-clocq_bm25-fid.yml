@@ -1,0 +1,127 @@
+name: "nc_all-clocq_bm25-fid"
+log_level: "INFO"
+dev: False
+
+# Construct pipeline
+qu: nc_all
+ers: clocq_bm25
+ha: fid
+
+# Define source combinations
+source_combinations:
+  - - kb
+  - - text
+  - - table
+  - - info
+  - - kb
+    - text
+  - - kb
+    - table
+  - - kb 
+    - info
+  - - text
+    - table
+  - - text 
+    - info
+  - - table
+    - info
+  - - kb
+    - text
+    - table
+    - info
+
+#################################################################
+#  General file paths
+#################################################################
+path_to_stopwords: "_data/stopwords.txt"
+path_to_labels: "_data/labels.pickle"
+path_to_wikipedia_mappings: "_data/wikipedia_mappings.pickle"
+path_to_wikidata_mappings: "_data/wikidata_mappings.pickle"
+
+#################################################################
+#  Benchmark specific settings
+#################################################################
+benchmark: "convmix"
+benchmark_path: "_benchmarks/convmix"
+
+train_input_path: "train_set/train_set_ALL.json"
+dev_input_path: "dev_set/dev_set_ALL.json"
+test_input_path: "test_set/test_set_ALL.json"
+
+path_to_annotated: "_intermediate_representations/convmix" # where annotated inputs come from
+path_to_intermediate_results: "_intermediate_representations/convmix"
+
+#################################################################
+#  Parameters - CLOCQ
+#################################################################
+clocq_params:
+  h_match: 0.4
+  h_rel: 0.2
+  h_conn: 0.3
+  h_coh: 0.1
+  d: 20
+  k: "AUTO"
+  p_setting: 1000 # setting for search_space function
+  bm25_limit: False
+clocq_p: 1000 #  setting for neighborhood function(s) 
+clocq_use_api: True # using CLOCQClientInterface
+clocq_host: "https://clocq.mpi-inf.mpg.de/api" # host for client
+clocq_port: "443" # port for client
+
+#################################################################
+#  Parameters - Silver annotation
+#################################################################
+# general
+ds_sources: ["kb"]
+ds_prune_noisy_qa_pairs: False
+
+# annotation - SR
+sr_relation_shared_active: False
+sr_remove_stopwords: False
+
+# OPTIONAL: annotation - turn relevance 
+tr_transitive_relevances: False
+tr_extract_dataset: False
+
+#################################################################
+#  Parameters - QU
+#################################################################
+naive_concat: all
+
+#################################################################
+#  Parameters - ERS
+#################################################################  
+# cache path
+ers_use_cache: True
+ers_cache: "_data/convmix/nc_all/er_cache.pickle"
+ers_wikipedia_dump: "_data/convmix/wikipedia_dump.pickle"
+ers_wikipedia_to_wikidata_links_cache: "_data/convmix/cache_wikipedia_to_wikidata_links.pickle"
+ers_on_the_fly: True
+
+# evidence retrieval
+evr_min_evidence_length: 3
+evr_max_evidence_length: 200
+evr_max_entities: 10 # max entities per evidence
+
+# evidence scoring
+evs_max_evidences: 100
+
+#################################################################
+#  Parameters - HA
+#################################################################
+# general
+ha_max_answers: 50
+
+fid_model_path: "_data/convmix/nc_all/fid/best_dev"
+fid_per_gpu_batch_size: 1
+fid_max_evidences: 100
+
+# train
+fid_lr: 0.00005
+fid_optim: adamw
+fid_scheduler: linear
+fid_weight_decay: 0.01
+fid_text_maxlength: 250
+fid_answer_maxlength: 10
+fid_total_step: 15000
+fid_warmup_step: 1000

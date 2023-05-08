@@ -1,0 +1,44 @@
+# meta data
+*__pycache__
+explaignn.egg-info/
+.DS_Store
+.idea
+
+# data folders
+_data/
+_intermediate_representations/
+_benchmarks/
+
+# specific folders
+*results/
+*logs/
+*cache/
+*examples/
+*out/
+*runs/
+*tmp/
+*ablations/
+
+# data files
+*.pickle
+*.out
+*.json
+*.jsonl
+*.csv
+*.res
+*.honeypot
+
+# specific paths
+clocq/
+CLOCQ/
+explaignn_env/
+backup/
+test.py
+INTERNAL_*
+convquestions/
+send_telegram_message.py
+explaignn_*.yml
+
+# other repos
+explaignn/heterogeneous_answering/fid_module/FiD/
+explaignn/question_understanding/question_resolution/quretec/
