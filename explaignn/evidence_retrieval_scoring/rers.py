@@ -29,11 +29,12 @@ class RERS(EvidenceRetrievalScoring):
         turn["num_evidences"] = [len(top_evidences)]
 
         # answer presence
-        hit, answering_evidences = answer_presence(top_evidences, turn["answers"])
-        turn["answer_presence"] = hit
-        turn["answer_presence_per_src"] = {
-            evidence["source"]: 1 for evidence in answering_evidences
-        }
+        if "answers" in turn:
+            hit, answering_evidences = answer_presence(top_evidences, turn["answers"])
+            turn["answer_presence"] = hit
+            turn["answer_presence_per_src"] = {
+                evidence["source"]: 1 for evidence in answering_evidences
+            }
         return top_evidences
 
     def retrieve_evidences(
