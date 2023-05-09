@@ -114,12 +114,13 @@ class IterativeGNNs(HeterogeneousAnswering):
             turns_before_iteration.append(copy.deepcopy(turns))
 
             # compute ans pres
-            answer_presence_list = [turn["answer_presence"] for turn in turns]
-            answer_presence = sum(answer_presence_list) / len(answer_presence_list)
-            answer_presence = round(answer_presence, 3)
-            num_questions = len(answer_presence_list)
-            res_str = f"Inference - Ans. pres. ({num_questions}): {answer_presence}"
-            self.logger.info(res_str)
+            if "answers" in turns[0]:
+                answer_presence_list = [turn["answer_presence"] for turn in turns]
+                answer_presence = sum(answer_presence_list) / len(answer_presence_list)
+                answer_presence = round(answer_presence, 3)
+                num_questions = len(answer_presence_list)
+                res_str = f"Inference - Ans. pres. ({num_questions}): {answer_presence}"
+                self.logger.info(res_str)
 
             self.gnns[i].inference_on_turns(turns)
 
