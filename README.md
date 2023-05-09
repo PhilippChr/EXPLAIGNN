@@ -291,7 +291,7 @@ Further information on how to retrieve evidences from Wikipedia can be found in 
 # Feedback
 We tried our best to document the code of this project, and for making it accessible for easy usage, and for testing your custom implementations of the individual pipeline-components. However, our strengths are not in software engineering, and there will very likely be suboptimal parts in the documentation and code.
 If you feel that some part of the documentation/code could be improved, or have other feedback,
-please do not hesitate and let use know! You can e.g. contact us via mail: pchristm@mpi-inf.mpg.de.
+please do not hesitate and let us know! You can e.g. contact us via mail: pchristm@mpi-inf.mpg.de.
 Any feedback (also positive ;) ) is much appreciated!
 
 # License
