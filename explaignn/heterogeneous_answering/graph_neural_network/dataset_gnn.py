@@ -202,10 +202,8 @@ class DatasetGNN(Dataset):
                 g_ent_id = entity_to_id.get(entity_id)
                 # check if entity already known
                 if g_ent_id is None:
-                    ## add entity emb
                     # continue if max_entities reached
                     if num_entities == (max_entities - 1):
-                        # print(turn["question_id"], "Dropping one entity;;;")
                         continue
 
                     g_ent_id = num_entities
@@ -280,7 +278,6 @@ class DatasetGNN(Dataset):
 
         # create final object
         instance = {
-            "question_id": turn["question_id"],
             "entities": entities_list,
             "entity_mask": entity_mask,
             "evidences": evidences_list,
