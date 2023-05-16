@@ -9,26 +9,19 @@ ha: fid
 
 # Define source combinations
 source_combinations:
-  - - kb
-  - - text
-  - - table
-  - - info
-  - - kb
-    - text
-  - - kb
-    - table
-  - - kb 
-    - info
-  - - text
-    - table
-  - - text 
-    - info
-  - - table
-    - info
-  - - kb
-    - text
-    - table
-    - info
+  [
+    ["kb"],
+    ["text"],
+    ["table"],
+    ["info"],
+    ["kb", "text"],
+    ["kb", "table"],
+    ["kb", "info"],
+    ["text", "table"],
+    ["text", "info"],
+    ["table", "info"],
+    ["kb", "text", "table", "info"]
+  ]
 
 #################################################################
 #  General file paths
