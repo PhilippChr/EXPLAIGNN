@@ -14,4 +14,4 @@ echo $OUT
 
 # start script
 export CONFIG OUT
-nohup sh -c 'python -u explaignn/distant_supervision/silver_annotation.py --inference ${CONFIG} ; python send_telegram_message.py ${OUT}'  > $OUT 2>&1 &
+nohup sh -c 'python -u explaignn/distant_supervision/silver_annotation.py --inference ${CONFIG}'  > $OUT 2>&1 &
