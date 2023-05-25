@@ -149,7 +149,7 @@ class ClocqRetriever:
             evidences.append(evidence)
 
         # store result in cache
-        if self.use_cache:
+        if self.use_cache and self.config.get("ers_update_clocq_cache", True):
             self.cache_changed = True
             self.cache[structured_representation] = (copy.deepcopy(evidences), disambiguations)
         return evidences, disambiguations

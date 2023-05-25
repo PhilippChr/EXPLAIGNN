@@ -36,6 +36,7 @@ backup/
 test.py
 INTERNAL_*
 convquestions/
+compmix/
 send_telegram_message.py
 explaignn_*.yml
 
