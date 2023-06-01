@@ -41,6 +41,7 @@ class BilinearAnswering(Answering):
         logits = F.softmax(outputs, dim=1)  # batch_size x num_ent x 1
         mask = batch["entity_mask"]
         logits = logits.squeeze() * mask
+        logits = logits.clamp(min=1e-30) if self.config.get("gnn_clamping", False) else logits
 
         loss = None
         accuracies = list()

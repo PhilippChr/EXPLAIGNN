@@ -59,8 +59,8 @@ class NaiveConcat(QuestionUnderstanding):
 
         ## consider only current turn
         elif self.config["naive_concat"] == "none":
-            history_turns = []
-
+            return current_turn["question"]
+            
         else:
             raise Exception("Unknown value for naive_concat!")
 

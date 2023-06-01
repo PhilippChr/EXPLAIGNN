@@ -41,6 +41,7 @@ class MultitaskLinearAnswering(Answering):
             batch["entity_mask"].unsqueeze(2).expand(-1, -1, 2)
         )  # expand to match the 2 outputs per entity
         answer_logits = ent_logits.squeeze() * entity_mask
+        answer_logits = answer_logits.clamp(min=1e-30) if self.config.get("gnn_clamping", False) else answer_logits
 
         outputs_ev = self.evidences_linear(ev_mat).squeeze(dim=2)  # batch_size x num_ent x 2
         outputs_ev = F.dropout(outputs_ev, self.dropout, training=train)  # batch_size x num_ent x 2
@@ -49,6 +50,7 @@ class MultitaskLinearAnswering(Answering):
             batch["evidence_mask"].unsqueeze(2).expand(-1, -1, 2)
         )  # expand to match the 2 outputs per evidence
         ev_logits = ev_logits.squeeze() * evidence_mask
+        ev_logits = ev_logits.clamp(min=1e-30) if self.config.get("gnn_clamping", False) else ev_logits
 
         loss = None
         accuracies = list()

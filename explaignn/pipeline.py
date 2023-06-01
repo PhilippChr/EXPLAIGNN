@@ -418,7 +418,7 @@ def main():
         sources_str = sys.argv[3] if len(sys.argv) > 3 else "kb_text_table_info"
         pipeline = Pipeline(config, use_gold_answers=True)
         modules_to_train_str = function.replace("--train", "")
-        modules_to_train = ("qu", "ers", "ha") if not modules_to_train_str else [modules_to_train_str]
+        modules_to_train = ("qu", "ers", "ha") if not modules_to_train_str else modules_to_train_str
         pipeline.train(sources_str, modules_to_train)
 
     elif function == "--source-combinations":

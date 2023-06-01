@@ -57,7 +57,7 @@ class StructuredRepresentationModel(torch.nn.Module):
         dev_dataset = dataset.DatasetStructuredRepresentation(self.config, self.tokenizer, dev_path)
         # arguments for training
         training_args = transformers.Seq2SeqTrainingArguments(
-            output_dir="explaignn/question_understanding/structured_representation/results",  # output directory
+            output_dir=f"explaignn/question_understanding/structured_representation/results_{self.config['name']}",  # output directory
             num_train_epochs=self.config["sr_num_train_epochs"],  # total number of training epochs
             per_device_train_batch_size=self.config[
                 "sr_per_device_train_batch_size"

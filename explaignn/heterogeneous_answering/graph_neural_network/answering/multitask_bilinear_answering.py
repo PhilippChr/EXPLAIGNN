@@ -42,6 +42,7 @@ class MultitaskBilinearAnswering(Answering):
         answer_logits = F.softmax(answer_outputs, dim=1)  # batch_size x num_ent x 1
         entity_mask = batch["entity_mask"]
         answer_logits = answer_logits.squeeze() * entity_mask
+        answer_logits = answer_logits.clamp(min=1e-30) if self.config.get("gnn_clamping", False) else answer_logits
 
         projected_evidences = self.evidences_linear_projection(ev_mat)  # batch_size x num_ev x emb
         projected_evidences = F.dropout(
@@ -53,6 +54,7 @@ class MultitaskBilinearAnswering(Answering):
         ev_logits = F.softmax(ev_outputs, dim=1)  # batch_size x num_ev x 1
         evidence_mask = batch["evidence_mask"]
         ev_logits = ev_logits.squeeze() * evidence_mask
+        ev_logits = ev_logits.clamp(min=1e-30) if self.config.get("gnn_clamping", False) else ev_logits
 
         loss = None
         accuracies = list()

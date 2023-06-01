@@ -99,6 +99,7 @@ class HeterogeneousGNN(torch.nn.Module):
             projected_evs = w_ev_att(evidences_mat)
             ev_att_scores = torch.bmm(projected_evs, sr_vec.unsqueeze(dim=2))
             ev_att_scores = F.softmax(ev_att_scores, dim=1)
+            ev_att_scores = ev_att_scores.clamp(min=1e-30, max=1e20) if self.config.get("gnn_clamping", False) else ev_att_scores
 
             # multiply with adjacency
             evidence_weights = ev_att_scores * ev_to_ent.unsqueeze(dim=0)
@@ -124,6 +125,7 @@ class HeterogeneousGNN(torch.nn.Module):
             projected_ents = w_ent_att(entities_mat) # size: batch_size x num_ent x emb
             ent_att_scores = torch.bmm(projected_ents, sr_vec.unsqueeze(dim=2)) # size: batch_size x num_ent x 1
             ent_att_scores = F.softmax(ent_att_scores, dim=1) # size: batch_size x num_ent x 1
+            ent_att_scores = ent_att_scores.clamp(min=1e-30, max=1e20) if self.config.get("gnn_clamping", False) else ent_att_scores
 
             # multiply with adjacency
             entity_weights = ent_att_scores * ent_to_ev.unsqueeze(dim=0)

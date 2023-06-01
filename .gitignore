@@ -39,6 +39,8 @@ convquestions/
 compmix/
 send_telegram_message.py
 explaignn_*.yml
+reign_explaignn_3refs
+results_*/
 
 # other repos
 explaignn/heterogeneous_answering/fid_module/FiD/

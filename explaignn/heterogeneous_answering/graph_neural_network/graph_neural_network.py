@@ -76,6 +76,7 @@ class GNNModule(HeterogeneousAnswering):
         # start training loop
         min_dev_loss = np.inf
         min_dev_qa = -1
+        steps = 0
 
         self.logger.info(f"Starting training...")
 
@@ -98,6 +99,8 @@ class GNNModule(HeterogeneousAnswering):
                 optimizer.step()
                 # calculate loss
                 train_loss += loss.item()
+                steps += 1
+                self.logger.debug(f"Steps: {steps}, loss: {loss.item()}, aggregated loss: {train_loss}")
 
                 # free up GPU space
                 del instances

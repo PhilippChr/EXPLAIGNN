@@ -14,7 +14,6 @@ from explaignn.library.utils import get_config, get_logger, store_json_with_mkdi
 SEED = 7
 START_DATE = time.strftime("%y-%m-%d_%H-%M", time.localtime())
 
-
 class IterativeGNNs(HeterogeneousAnswering):
     def __init__(self, config):
         super(IterativeGNNs, self).__init__(config)

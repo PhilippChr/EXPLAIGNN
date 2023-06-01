@@ -41,6 +41,7 @@ class LinearAnswering(Answering):
             batch["entity_mask"].unsqueeze(2).expand(-1, -1, 2)
         )  # expand to match the 2 outputs per entity
         logits = logits * mask
+        logits = logits.clamp(min=1e-30) if self.config.get("gnn_clamping", False) else logits
 
         loss = None
         accuracies = list()
