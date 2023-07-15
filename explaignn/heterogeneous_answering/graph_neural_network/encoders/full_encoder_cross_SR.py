@@ -10,53 +10,12 @@ from explaignn.library.string_library import StringLibrary
 class FullEncoderCrossSR(Encoder):
     def __init__(self, config):
         super(FullEncoderCrossSR, self).__init__(config)
-
-        # load params
-        self.emb_dimension = config["gnn_emb_dimension"]
-
-        self.max_input_length_sr = config["gnn_enc_sr_max_input"]
-        self.max_input_length_ev = config["gnn_enc_ev_max_input"]
-        self.max_input_length_ent = config["gnn_enc_ent_max_input"]
+        self.initialize(config)
 
         if config.get("gnn_add_entity_type"):
             self.string_lib = StringLibrary(config)
             with open(self.config["path_to_types"], "rb") as fp:
                 self.type_dict = pickle.load(fp)
-
-        # load LM
-        if config["gnn_encoder_lm"] == "BERT":
-            self.tokenizer = transformers.BertTokenizer.from_pretrained("bert-base-uncased")
-            self.model = transformers.BertModel.from_pretrained("bert-base-uncased")
-            self.sep_token = "[SEP]"
-        elif "gnn_hidden_layers" in config:
-            lm_config = transformers.DistilBertConfig(n_layers=config["gnn_hidden_layers"])
-            self.tokenizer = transformers.DistilBertTokenizer.from_pretrained(
-                "distilbert-base-uncased"
-            )
-            self.model = transformers.DistilBertModel(lm_config)
-            self.sep_token = "[SEP]"
-        elif "gnn_hidden_layers_pretrained" in config:
-            self.tokenizer = transformers.DistilBertTokenizer.from_pretrained(
-                "distilbert-base-uncased"
-            )
-            self.model = transformers.DistilBertModel.from_pretrained("distilbert-base-uncased")
-            self.model.transformer.n_layers = config["gnn_hidden_layers_pretrained"]
-            self.model.transformer.layer = self.model.transformer.layer[
-                : config["gnn_hidden_layers_pretrained"]
-            ]
-            self.sep_token = "[SEP]"
-        elif config["gnn_encoder_lm"] == "DistilBERT":
-            self.tokenizer = transformers.DistilBertTokenizer.from_pretrained(
-                "distilbert-base-uncased"
-            )
-            self.model = transformers.DistilBertModel.from_pretrained("distilbert-base-uncased")
-            self.sep_token = "[SEP]"
-        elif config["gnn_encoder_lm"] == "DistilRoBERTa":
-            self.tokenizer = transformers.AutoTokenizer.from_pretrained("distilroberta-base")
-            self.model = transformers.AutoModel.from_pretrained("distilroberta-base")
-            self.sep_token = " </s>"
-        else:
-            raise Exception("Unknown architecture for Encoder module specified in config.")
 
         # instantiate linear encoding layer
         if self.config["gnn_encoder_linear"]:

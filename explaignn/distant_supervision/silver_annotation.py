@@ -246,7 +246,7 @@ def main():
         input_path = os.path.join(benchmark_path, config["train_input_path"])
         annotator.random_example(input_path, index=1679)
     else:
-        output_dir = config["path_to_annotated"]
+        output_dir = config["path_to_intermediate_results"]
         tr_output_dir = os.path.join(config["path_to_intermediate_results"], "tr")
         Path(tr_output_dir).mkdir(parents=True, exist_ok=True)
         method_name = config["name"]

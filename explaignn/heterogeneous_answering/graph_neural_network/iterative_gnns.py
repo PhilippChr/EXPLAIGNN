@@ -11,6 +11,8 @@ from explaignn.heterogeneous_answering.graph_neural_network.graph_neural_network
 from explaignn.heterogeneous_answering.heterogeneous_answering import HeterogeneousAnswering
 from explaignn.library.utils import get_config, get_logger, store_json_with_mkdir
 
+torch.autograd.set_detect_anomaly(True)
+
 SEED = 7
 START_DATE = time.strftime("%y-%m-%d_%H-%M", time.localtime())
 
@@ -101,7 +103,7 @@ class IterativeGNNs(HeterogeneousAnswering):
         self.log_results(turns)
         self.logger.info(f"Finished inference.")
 
-    def inference_on_turns(self, turns, sources=("kb", "text", "table", "info"), train=False):
+    def inference_on_turns(self, turns, sources=("kb", "text", "table", "info"), train=False, use_tqdm=True):
         """Run inference on a set of turns."""
         self.load()
 
@@ -121,7 +123,7 @@ class IterativeGNNs(HeterogeneousAnswering):
                 res_str = f"Inference - Ans. pres. ({num_questions}): {answer_presence}"
                 self.logger.info(res_str)
 
-            self.gnns[i].inference_on_turns(turns)
+            self.gnns[i].inference_on_turns(turns, sources, train, use_tqdm)
 
         # remember top evidences
         for turn_idx, turn in enumerate(turns):
@@ -136,7 +138,7 @@ class IterativeGNNs(HeterogeneousAnswering):
 
     def inference_on_turn(self, turn, sources=("kb", "text", "table", "info"), train=False):
         """Run inference on a single turn."""
-        return self.inference_on_turns([turn], sources, train)
+        return self.inference_on_turns([turn], sources, train, use_tqdm=False)[0]
 
     def dev(self, sources=("kb", "text", "table", "info")):
         """Evaluate the iterative GNN on the dev set."""

@@ -24,9 +24,8 @@ class StructuredRepresentationModule(QuestionUnderstanding):
         """Train the model on silver SR data."""
         # train model
         self.logger.info(f"Starting training...")
-        data_dir = self.config["path_to_annotated"]
-        train_path = os.path.join(data_dir, "annotated_train.json")
-        dev_path = os.path.join(data_dir, "annotated_dev.json")
+        train_path = self.config["path_to_annotated_train"]
+        dev_path = self.config["path_to_annotated_dev"]
         self.sr_model.train(train_path, dev_path)
         self.sr_model.save()
         self.logger.info(f"Finished training.")
@@ -123,7 +122,16 @@ class StructuredRepresentationModule(QuestionUnderstanding):
             srs = self.sr_model.inference_top_k(input_str)
             # format SR properly
             srs = [self._format_sr(sr) for sr in srs]
-            return srs
+            srs_set = set()
+            new_srs = list()
+            # filter duplicates (with different whitespaces or casing)
+            for sr in srs:
+                sr_lowered = sr.lower()
+                if sr_lowered in srs_set:
+                    continue
+                srs_set.add(sr_lowered)
+                new_srs.append(sr)
+            return new_srs[:self.config["sr_top_k"]]
         # compute top-k SRs and aggregate results
         elif self.config.get("sr_top_k_aggregation"):
             srs = self.sr_model.inference_top_k(input_str)

@@ -103,6 +103,7 @@ class HeterogeneousGNN(torch.nn.Module):
 
             # multiply with adjacency
             evidence_weights = ev_att_scores * ev_to_ent.unsqueeze(dim=0)
+            evidence_weights = evidence_weights.clamp(min=1e-30, max=1e20) if self.config.get("gnn_clamping", False) else evidence_weights
             evidence_weights = evidence_weights.squeeze(dim=0).transpose(1, 2)
 
             # normalize
@@ -129,6 +130,7 @@ class HeterogeneousGNN(torch.nn.Module):
 
             # multiply with adjacency
             entity_weights = ent_att_scores * ent_to_ev.unsqueeze(dim=0)
+            entity_weights = entity_weights.clamp(min=1e-30, max=1e20) if self.config.get("gnn_clamping", False) else entity_weights
             entity_weights = entity_weights.squeeze(dim=0).transpose(1, 2)
 
             # normalize

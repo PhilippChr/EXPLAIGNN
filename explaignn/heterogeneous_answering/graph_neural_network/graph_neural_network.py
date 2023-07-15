@@ -12,6 +12,8 @@ from explaignn.heterogeneous_answering.graph_neural_network.gnn_factory import G
 from explaignn.heterogeneous_answering.heterogeneous_answering import HeterogeneousAnswering
 from explaignn.library.utils import get_logger
 
+torch.autograd.set_detect_anomaly(True)
+
 START_DATE = time.strftime("%y-%m-%d_%H-%M", time.localtime())
 
 class GNNModule(HeterogeneousAnswering):
@@ -180,12 +182,15 @@ class GNNModule(HeterogeneousAnswering):
         # done
         self.logger.info(f"Finished training.")
 
-    def inference_on_turns(self, turns, sources=("kb", "text", "table", "info"), train=False):
+    def inference_on_turns(self, turns, sources=("kb", "text", "table", "info"), train=False, use_tqdm=True):
         """Run inference on a multiple turns."""
         self.logger.info("Running inference_on_turns function!")
         self.load()
 
-        with torch.no_grad(), tqdm(total=len(turns)) as p_bar:
+        if use_tqdm:
+            p_bar = tqdm(total=len(turns))
+
+        with torch.no_grad():
             batch_size = self.config["gnn_eval_batch_size"]
 
             # run inference
@@ -233,12 +238,14 @@ class GNNModule(HeterogeneousAnswering):
                     if "instance" in turn:
                         del turn["instance"]
                 start_index += batch_size
-                p_bar.update(batch_size)
+                
+                if use_tqdm:
+                    p_bar.update(batch_size)
         return turns
 
     def inference_on_turn(self, turn, sources=("kb", "text", "table", "info"), train=False):
         """Run inference on a single turn."""
-        return self.inference_on_turns([turn], sources, train)[0]
+        return self.inference_on_turns([turn], sources, train, use_tqdm=False)[0]
 
     @staticmethod
     def _move_to_cuda(obj):

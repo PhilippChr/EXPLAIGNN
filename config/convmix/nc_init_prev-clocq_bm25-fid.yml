@@ -41,7 +41,8 @@ train_input_path: "train_set/train_set_ALL.json"
 dev_input_path: "dev_set/dev_set_ALL.json"
 test_input_path: "test_set/test_set_ALL.json"
 
-path_to_annotated: "_intermediate_representations/convmix" # where annotated inputs come from
+path_to_annotated_train: "_intermediate_representations/convmix/annotated_train.json"
+path_to_annotated_dev: "_intermediate_representations/convmix/annotated_dev.json"
 path_to_intermediate_results: "_intermediate_representations/convmix"
 
 #################################################################

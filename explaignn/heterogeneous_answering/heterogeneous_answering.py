@@ -17,7 +17,7 @@ class HeterogeneousAnswering:
 
     def inference(self):
         """Run HA on data and add answers for each source combination."""
-        input_dir = self.config["path_to_annotated"]
+        input_dir = self.config["path_to_intermediate_results"]
 
         qu = self.config["qu"]
         ers = self.config["ers"]

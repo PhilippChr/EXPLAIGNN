@@ -280,7 +280,7 @@ def main():
 
     elif function == "--test":
         fid = FiDModule(config)
-        input_dir = config["path_to_annotated"]
+        input_dir = config["path_to_intermediate_results"]
         output_dir = config["path_to_intermediate_results"]
 
         qu = config["qu"]

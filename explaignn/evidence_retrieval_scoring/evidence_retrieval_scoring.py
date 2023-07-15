@@ -21,7 +21,7 @@ class EvidenceRetrievalScoring:
 
     def inference(self, sources=None):
         """Run ERS on data and add retrieve top-e evidences for each source combination."""
-        input_dir = self.config["path_to_annotated"]
+        input_dir = self.config["path_to_intermediate_results"]
         output_dir = self.config["path_to_intermediate_results"]
 
         qu = self.config["qu"]

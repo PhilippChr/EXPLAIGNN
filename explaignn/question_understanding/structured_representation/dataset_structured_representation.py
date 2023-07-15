@@ -29,11 +29,17 @@ def _history_turn_to_text(history_turn, history_separator):
     return history_turn_text
 
 
-def output_to_text(silver_sr, sr_delimiter):
+def output_to_text(turn, sr_delimiter):
     """
     Transform the given silver abstract representation to text.
     The (recursive) list data structure is resolved and flattened.
     """
+    # for iterative training, the silver_sr is already a string (not a list)
+    if "ii_srs" in turn:
+        return turn["ii_srs"]
+
+    silver_sr = turn["silver_SR"]
+
     topic, entities, relation, ans_type = silver_sr[0]
 
     # create individual components
@@ -101,11 +107,24 @@ class DatasetStructuredRepresentation(torch.utils.data.Dataset):
             history = list()
             for turn in conversation["questions"]:
                 # skip examples for which no gold SR was found, or for first turn
-                if not turn["silver_SR"]:
-                    continue
+                if "ii_data_used" in self.config and self.config["ii_data_used"]:
+                    if not turn["ii_srs"]:
+                        continue
+                    output_texts = output_to_text(turn, self.sr_delimiter)
+                    input_text = input_to_text(history, turn, self.history_separator)
+                    input_texts = len(output_texts) * [input_text]
+                    inputs += input_texts
+                    outputs += output_texts
 
-                inputs.append(input_to_text(history, turn, self.history_separator))
-                outputs.append(output_to_text(turn["silver_SR"], self.sr_delimiter))
+                else:
+                    if not turn["silver_SR"]:
+                        continue
+
+                    output_text = output_to_text(turn, self.sr_delimiter)
+                    input_text = input_to_text(history, turn, self.history_separator)
+                    inputs.append(input_text)
+                    outputs.append(output_text)
+                    
 
                 # append to history
                 history.append(turn)

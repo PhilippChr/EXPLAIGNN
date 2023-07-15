@@ -22,7 +22,7 @@ class QuestionUnderstanding:
         """Run model on data and add predictions."""
         # inference: add predictions to data
         qu = self.config["qu"]
-        input_dir = self.config["path_to_annotated"]
+        input_dir = self.config["path_to_intermediate_results"]
         output_dir = self.config["path_to_intermediate_results"]
         method_name = self.config["name"]
 

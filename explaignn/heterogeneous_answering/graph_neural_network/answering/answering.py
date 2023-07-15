@@ -137,6 +137,7 @@ class Answering(torch.nn.Module):
                     "g_id": id_to_evidence[candidate_idx]["g_id"],
                     "idx": candidate_idx.item(),
                     "is_answering_evidence": id_to_evidence[candidate_idx]["is_answering_evidence"],
+                    "wikipedia_path": id_to_evidence[candidate_idx]["wikipedia_path"] if "wikipedia_path" in id_to_evidence[candidate_idx] else None
                 }
                 for candidate_idx in top_candidate_ids.indices
                 if not id_to_evidence[candidate_idx] == 0

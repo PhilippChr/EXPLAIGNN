@@ -79,15 +79,6 @@ class WikipediaRetriever:
         Filtering is done via filter_evidences function.
         """
         question_entity_id = question_entity["id"]
-        if self.use_cache and question_entity_id in self.wikipedia_dump:
-            self.logger.debug(f"Found Wikipedia evidences in dump!")
-            return self.wikipedia_dump.get(question_entity_id)
-
-        if not self.on_the_fly:
-            self.logger.debug(
-                f"No Wikipedia evidences in dump, but on-the-fly retrieval not active!"
-            )
-            return []
 
         # get Wikipedia title
         wiki_path = self.wikipedia_mappings.get(question_entity_id)
@@ -98,6 +89,21 @@ class WikipediaRetriever:
             if self.use_cache:
                 self.wikipedia_dump[question_entity_id] = []  # remember
             return []
+
+        if self.use_cache and question_entity_id in self.wikipedia_dump:
+            self.logger.debug(f"Found Wikipedia evidences in dump!")
+            evidences = self.wikipedia_dump.get(question_entity_id)
+            for evidence in evidences:
+                if not "wikipedia_path" in evidence:
+                    evidence["wikipedia_path"] = wiki_path
+            return evidences
+
+        if not self.on_the_fly:
+            self.logger.debug(
+                f"No Wikipedia evidences in dump, but on-the-fly retrieval not active!"
+            )
+            return []
+        
         self.logger.debug(f"Retrieving Wikipedia evidences for: {wiki_path}.")
         self.dump_changed = True
 
@@ -127,6 +133,7 @@ class WikipediaRetriever:
         # add `retrieved_for_entity` information
         for evidence in evidences:
             evidence["retrieved_for_entity"] = [question_entity]
+            evidence["wikipedia_path"] = wiki_path
 
         ## add wikidata entities (for table and text)
         # evidences with no wikidata entities (except for the wiki_path) are dropped
